@@ -18,11 +18,25 @@ data "archive_file" "lambda_users_set" {
   output_path = "${path.module}/_modules/python/user-store-set.zip"
 }
 
+data "archive_file" "authorizer" {
+  type = "zip"
+
+  source_file  = "${path.module}/_modules/nodejs/authorizer.mjs"
+  output_path = "${path.module}/_modules/nodejs/authorizer.zip"
+}
+
 module "Lambda" {
     source = "./_modules/lambda"
     depends_on = [module.lambda_s3_bucket]
     source_code_hash_get = data.archive_file.lambda_users_get.output_base64sha256
     source_code_hash_set= data.archive_file.lambda_users_set.output_base64sha256
+}
+
+module "authorizer" {
+    source = "./_modules/authorizer"
+    depends_on = [module.lambda_s3_bucket]
+    source_code_hash_get = data.archive_file.authorizer.output_base64sha256
+    source_code_hash_set= data.archive_file.authorizer.output_base64sha256
 }
 
 module "lambda_s3_bucket" {
@@ -31,6 +45,8 @@ module "lambda_s3_bucket" {
     etagGetUsers=filemd5(data.archive_file.lambda_users_get.output_path)
     sourcec_setusers = data.archive_file.lambda_users_set.output_path
     etagSetUsers=filemd5(data.archive_file.lambda_users_set.output_path)
+    sourcec_authorizer = data.archive_file.authorizer.output_path
+    etagauthorizer=filemd5(data.archive_file.authorizer.output_path)
 }
 
 module "dyanmodb" {
@@ -47,4 +63,5 @@ module "dyanmodb" {
     lambda_arn_get_user = module.Lambda.lambda_arn_UsersGet
     lambda_func_get_user_name = module.Lambda.function_name_get
     lambda_func_set_user_name =  module.Lambda.function_name_set
+    lambda_function_authorizer_invoke_arn = module.authorizer.lambda_invoke_arn_authorizer
 }

@@ -13,3 +13,11 @@ variable "sourcec_setusers" {
 variable "etagSetUsers" {
     type = string
 }
+
+variable "sourcec_authorizer" {
+    type = string
+}
+
+variable "etagauthorizer" {
+    type = string
+}

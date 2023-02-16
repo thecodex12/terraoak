@@ -4,7 +4,7 @@ output "apigateway_api_execution_arn" {
 }
 
 
-# output "apigateway_api_api_endpoint" {
+# output "apigateway_rest_api_id" {
 #   description = "The URI of the API"
 #   value       = aws_apigateway_api.user_webinar.api_endpoint
 # }

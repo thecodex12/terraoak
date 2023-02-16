@@ -51,3 +51,4 @@ https://www.terraform.io/language/settings/backends/s3
 
 `curl "$(terraform output -raw base_url)/get-user?id=0"`
  
+`curl "$(terraform output -raw base_url)/get-user?id=0" -H "authorizationToken: allow"`

@@ -7,6 +7,14 @@ resource "aws_api_gateway_rest_api" "user_webinar" {
   }
 }
 
+resource "aws_api_gateway_authorizer" "demo" {
+  name                   = "demo"
+  rest_api_id            = aws_api_gateway_rest_api.user_webinar.id
+  authorizer_uri         = var.lambda_function_authorizer_invoke_arn
+  identity_source        = "method.request.header.authorizationToken"
+}
+
+
 resource "aws_api_gateway_deployment" "webinar" {
   rest_api_id = aws_api_gateway_rest_api.user_webinar.id
 
@@ -42,12 +50,25 @@ resource "aws_api_gateway_method" "get" {
   rest_api_id   = "${aws_api_gateway_rest_api.user_webinar.id}"
   resource_id   = "${aws_api_gateway_resource.webinar-proxy.id}"
   http_method   = "GET"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.demo.id
   request_validator_id = aws_api_gateway_request_validator.webinar-get.id
   request_parameters = {
-    "method.request.querystring.id" = true
+    "method.request.querystring.id" = true,
+    "method.request.header.authorizationToken" = true
   }
 }
+
+# resource "aws_api_gateway_method" "get" {
+#   rest_api_id   = "${aws_api_gateway_rest_api.user_webinar.id}"
+#   resource_id   = "${aws_api_gateway_resource.webinar-proxy.id}"
+#   http_method   = "GET"
+#   authorization = "NONE"
+#   request_validator_id = aws_api_gateway_request_validator.webinar-get.id
+#   request_parameters = {
+#     "method.request.querystring.id" = true
+#   }
+# }
 
 resource "aws_api_gateway_request_validator" "webinar-get" {
   name                        = "webinar-get"
@@ -69,7 +90,9 @@ resource "aws_api_gateway_method" "set" {
   rest_api_id   = "${aws_api_gateway_rest_api.user_webinar.id}"
   resource_id   = "${aws_api_gateway_resource.webinar-proxy.id}"
   http_method   = "POST"
-  authorization = "NONE"
+  //Bad practice to not have authorization
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.demo.id
   request_validator_id = aws_api_gateway_request_validator.webinar-set.id
   request_parameters = {
     "method.request.querystring.id" = true, 
@@ -77,9 +100,27 @@ resource "aws_api_gateway_method" "set" {
     "method.request.querystring.orgid" = true, 
     "method.request.querystring.plan" = true, 
     "method.request.querystring.orgname" = true, 
-    "method.request.querystring.creationdate" = true
+    "method.request.querystring.creationdate" = true, 
+    "method.request.header.authorizationToken" = true
   }
 }
+
+# resource "aws_api_gateway_method" "set" {
+#   rest_api_id   = "${aws_api_gateway_rest_api.user_webinar.id}"
+#   resource_id   = "${aws_api_gateway_resource.webinar-proxy.id}"
+#   http_method   = "POST"
+#   //Bad practice to not have authorization
+#   authorization = "NONE"
+#   request_validator_id = aws_api_gateway_request_validator.webinar-set.id
+#   request_parameters = {
+#     "method.request.querystring.id" = true, 
+#     "method.request.querystring.name" = true, 
+#     "method.request.querystring.orgid" = true, 
+#     "method.request.querystring.plan" = true, 
+#     "method.request.querystring.orgname" = true, 
+#     "method.request.querystring.creationdate" = true
+#   }
+# }
 
 resource "aws_api_gateway_request_validator" "webinar-set" {
   name                        = "webinar-set"

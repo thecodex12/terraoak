@@ -23,3 +23,7 @@ variable "lambda_func_get_user_name" {
 variable "lambda_func_set_user_name" {
     type = string
 }
+
+variable "lambda_function_authorizer_invoke_arn" {
+    type = string
+}

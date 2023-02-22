@@ -1,6 +1,6 @@
 resource "aws_api_gateway_rest_api" "user_webinar" {
-  name                         = var.name
-  description                  = var.description
+  name                         = "UserApi-sandbox"
+  description                  = "Api-Gateway-UserApi-Testing"
   binary_media_types           = ["UTF-8-encoded", "application/octet", "image/jpeg"]
   endpoint_configuration {
     types = ["EDGE"]
@@ -10,7 +10,7 @@ resource "aws_api_gateway_rest_api" "user_webinar" {
 resource "aws_api_gateway_authorizer" "demo" {
   name                   = "demo"
   rest_api_id            = aws_api_gateway_rest_api.user_webinar.id
-  authorizer_uri         = var.lambda_function_authorizer_invoke_arn
+  authorizer_uri         = aws_lambda_function.Authorizer.invoke_arn
   identity_source        = "method.request.header.authorizationToken"
 }
 
@@ -19,6 +19,7 @@ resource "aws_api_gateway_deployment" "webinar" {
   rest_api_id = aws_api_gateway_rest_api.user_webinar.id
 
   triggers = {
+    deployed_at = "Deployed at ${timestamp()}"
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.webinar-proxy.id,
       aws_api_gateway_method.get.id,
@@ -31,6 +32,7 @@ resource "aws_api_gateway_deployment" "webinar" {
   lifecycle {
     create_before_destroy = true
   }
+
 }
 
 resource "aws_api_gateway_stage" "webinar" {
@@ -83,7 +85,7 @@ resource "aws_api_gateway_integration" "integration-get" {
   integration_http_method = "POST"
   type = "AWS_PROXY"
   timeout_milliseconds   = 12000
-  uri           = var.lambda_arn_get_user
+  uri           = aws_lambda_function.UsersGet.invoke_arn
 }
 
 resource "aws_api_gateway_method" "set" {
@@ -135,13 +137,13 @@ resource "aws_api_gateway_integration" "integration-set" {
   integration_http_method = "POST"
   type = "AWS_PROXY"
   timeout_milliseconds   = 12000
-  uri           = var.lambda_arn_set_user
-}
+  uri           = aws_lambda_function.UsersSet.invoke_arn
 
+}
 resource "aws_lambda_permission" "allow_api-gateway_get" {
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
-  function_name = var.lambda_func_get_user_name
+  function_name = aws_lambda_function.UsersGet.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    =  "${aws_api_gateway_rest_api.user_webinar.execution_arn}/*/*"
 }
@@ -149,7 +151,7 @@ resource "aws_lambda_permission" "allow_api-gateway_get" {
 resource "aws_lambda_permission" "allow_api-gateway_set" {
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
-  function_name = var.lambda_func_set_user_name
+  function_name = aws_lambda_function.UsersSet.function_name
   principal     = "apigateway.amazonaws.com" 
   source_arn    = "${aws_api_gateway_rest_api.user_webinar.execution_arn}/*/*"
 }

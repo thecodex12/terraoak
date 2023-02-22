@@ -8,8 +8,12 @@ resource "aws_lambda_function" "UsersGet" {
   runtime = "python3.9"
   handler = "user-get.lambda_handler"
 
-  source_code_hash = var.source_code_hash_get
+  source_code_hash = data.archive_file.lambda_users_get.output_base64sha256
   role = aws_iam_role.lambda_exec.arn
+
+  depends_on = [
+    aws_s3_bucket.lambda_bucket
+  ]
 }
 
 resource "aws_lambda_function" "UsersSet" {
@@ -22,9 +26,13 @@ resource "aws_lambda_function" "UsersSet" {
   runtime = "python3.9"
   handler = "user-set.lambda_handler"
 
-  source_code_hash = var.source_code_hash_set
+  source_code_hash = data.archive_file.lambda_users_set.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
+
+    depends_on = [
+    aws_s3_bucket.lambda_bucket
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "lambdaUsersApi" {
@@ -32,8 +40,6 @@ resource "aws_cloudwatch_log_group" "lambdaUsersApi" {
 
   retention_in_days = 30
 }
-
-
 
 resource "aws_iam_role" "lambda_exec" {
   name = "serverless_lambda"

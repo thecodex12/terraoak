@@ -30,7 +30,7 @@ The code in this repo should not be run inside of your company's aws accounts bu
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.55.0 |
 
 
 * Ensure your create your backend bucket and table for terraform state file. This config will need to reside in a .tf file in the root directory. 
@@ -46,12 +46,12 @@ https://www.terraform.io/language/settings/backends/s3
 * Add a api user with following command 
 
 
-* without token (POST)
+# without token (POST)
 `curl -X POST "$(terraform output -raw base_url)/set-user?id=0&name=john&orgid=xyx&plan=enterprise&orgname=xyzdfd&creationdate=82322"`
 
 `curl "$(terraform output -raw base_url)/get-user?id=0"`
 
-* with token (GET)
+# with token (GET)
 `curl -X POST "$(terraform output -raw base_url)/set-user?id=0&name=john&orgid=xyx&plan=enterprise&orgname=xyzdfd&creationdate=82322 -H "authorizationToken: allow"`
 
 `curl "$(terraform output -raw base_url)/get-user?id=0" -H "authorizationToken: allow"`

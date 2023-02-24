@@ -15,5 +15,5 @@ terraform {
 provider "aws" {
   region  = "us-east-2"
   #needed if you are using aws profiles 
-  profile        = "sandbox"
+  #profile        = "sandbox"
 }

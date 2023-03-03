@@ -21,6 +21,10 @@ Lets Build a Users API using the below resources and secure using Oak9.
 * api-gateway
 * lambda 
 
+## Architecture Diagram
+
+<figure><img src="workshop.png" alt=""></figure>
+
 ## Terraform Code 
 
 The code in this repo should not be run inside of your company's aws accounts but rather in a playground account.   

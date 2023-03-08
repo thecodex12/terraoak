@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+
+
 resource "aws_lambda_function" "UsersGet" {
   function_name = "Users-Get"
 
@@ -89,7 +92,7 @@ resource "aws_iam_policy" "DynamoDbReadWrite" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"          
         ],
-        "Resource" : "*"
+        "Resource" : "arn:aws:dynamodb:eu-east-2:${data.aws_caller_identity.current.account_id}:table/Users"
       }
     ]
   })

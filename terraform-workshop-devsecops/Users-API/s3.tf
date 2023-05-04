@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "lambda_bucket" {
+resource "aws_s3_bucket" "lambda_bucket" { # oak9:  should be set to any of enabled, true
   bucket =  "terraformnew-webinar-demo-files"
 
   force_destroy = true

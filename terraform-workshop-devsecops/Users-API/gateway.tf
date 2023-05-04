@@ -1,4 +1,5 @@
 resource "aws_api_gateway_rest_api" "user_webinar" {
+  # oak9: Define asset inventory tags
   name                         = "UserApi-sandbox"
   description                  = "Api-Gateway-UserApi-Testing"
   binary_media_types           = ["UTF-8-encoded", "application/octet", "image/jpeg"]

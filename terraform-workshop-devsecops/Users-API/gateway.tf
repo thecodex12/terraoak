@@ -36,6 +36,7 @@ resource "aws_api_gateway_deployment" "webinar" {
 }
 
 resource "aws_api_gateway_stage" "webinar" {
+  # oak9: Enable Access logs for API stages
   deployment_id = aws_api_gateway_deployment.webinar.id
   rest_api_id   = aws_api_gateway_rest_api.user_webinar.id
   stage_name    = "webinar"

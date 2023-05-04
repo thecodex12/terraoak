@@ -1,4 +1,5 @@
 resource "aws_api_gateway_rest_api" "user_webinar" {
+  # oak9: Define asset inventory tags
   name                         = "UserApi-sandbox"
   description                  = "Api-Gateway-UserApi-Testing"
   binary_media_types           = ["UTF-8-encoded", "application/octet", "image/jpeg"]
@@ -36,6 +37,7 @@ resource "aws_api_gateway_deployment" "webinar" {
 }
 
 resource "aws_api_gateway_stage" "webinar" {
+  # oak9: Define asset inventory tags
   deployment_id = aws_api_gateway_deployment.webinar.id
   rest_api_id   = aws_api_gateway_rest_api.user_webinar.id
   stage_name    = "webinar"

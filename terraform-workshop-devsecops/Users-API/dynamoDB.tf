@@ -1,4 +1,5 @@
 resource "aws_dynamodb_table" "Users" {
+  # oak9: Define asset inventory tags
   name           = "Users"
   billing_mode   = "PROVISIONED"
   hash_key       = "id"

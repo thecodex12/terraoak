@@ -27,6 +27,7 @@ resource "aws_lambda_permission" "allow_api-gateway" {
 
 
 resource "aws_iam_role" "lambda_exec_auth" {
+  # oak9: Define asset inventory tags
   name = "serverless_lambda_authorizer"
 
   assume_role_policy = <<EOF

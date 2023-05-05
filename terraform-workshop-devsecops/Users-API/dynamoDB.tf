@@ -1,4 +1,5 @@
 resource "aws_dynamodb_table" "Users" {
+  # oak9: Use customer-managed key for at-rest encryption
   # oak9: Define asset inventory tags
   name           = "Users"
   billing_mode   = "PROVISIONED"

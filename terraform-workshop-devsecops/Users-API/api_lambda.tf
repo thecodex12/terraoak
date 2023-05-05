@@ -46,6 +46,7 @@ resource "aws_cloudwatch_log_group" "lambdaUsersApi" {
 
 resource "aws_iam_role" "lambda_exec" {
   # oak9: Define asset inventory tags
+  # oak9: Define asset inventory tags
   name = "serverless_lambda"
 
   assume_role_policy = <<EOF

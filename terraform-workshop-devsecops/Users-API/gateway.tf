@@ -1,4 +1,5 @@
 resource "aws_api_gateway_rest_api" "user_webinar" {
+  # oak9: Define resource based policies
   # oak9: Define asset inventory tags
   name                         = "UserApi-sandbox"
   description                  = "Api-Gateway-UserApi-Testing"

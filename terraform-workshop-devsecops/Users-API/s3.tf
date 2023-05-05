@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "lambda_bucket" {
   # oak9: Define asset inventory tags
+  # oak9: Define asset inventory tags
   bucket =  "terraformnew-webinar-demo-files"
 
   force_destroy = true
